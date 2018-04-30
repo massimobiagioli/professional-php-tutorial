@@ -8,8 +8,13 @@ require ROOT_DIR . '/vendor/autoload.php';
 
 $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 
-$content = 'Hello ' . $request->get('name', 'visitor');
+$controller = new \SocialNews\FrontPage\Presentation\FrontPageController();
+$response = $controller->show($request);
 
-$response = new \Symfony\Component\HttpFoundation\Response($content);
+if (!$response instanceof \Symfony\Component\HttpFoundation\Response)
+{
+    throw new \Exception('Controller methods must return a Response Object');
+}
+
 $response->prepare($request);
 $response->send();
