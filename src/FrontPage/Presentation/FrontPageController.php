@@ -1,28 +1,27 @@
-<?php declare(strict_types=1);
+<?php declare (strict_types = 1);
 
 namespace SocialNews\FrontPage\Presentation;
 
 use SocialNews\Framework\Rendering\TemplateRenderer;
+use SocialNews\FrontPage\Application\SubmissionsQuery; 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class FrontPageController
 {
     private $templateRenderer;
+    private $submissionsQuery;
 
-    public function __construct(TemplateRenderer $templateRenderer)
+    public function __construct(TemplateRenderer $templateRenderer, SubmissionsQuery $submissionsQuery)
     {
         $this->templateRenderer = $templateRenderer;
+        $this->submissionsQuery = $submissionsQuery;
     }
 
     public function show(Request $request): Response
     {
-        $submissions = [
-            ['url' => 'http://google.com', 'title' => 'Google<script>alert(1)</script>'],
-            ['url' => 'http://bing.com', 'title' => 'Bing']
-        ];
         $content = $this->templateRenderer->render('FrontPage.html.twig', [
-            'submissions' => $submissions
+            'submissions' => $this->submissionsQuery->execute()
         ]);
         return new Response($content);
     }
