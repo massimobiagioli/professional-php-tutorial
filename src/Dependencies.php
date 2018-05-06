@@ -5,7 +5,10 @@ use SocialNews\Framework\Rendering\TemplateRenderer;
 use SocialNews\Framework\Rendering\TwigTemplateRendererFactory;
 use SocialNews\Framework\Rendering\TemplateDirectory;
 use SocialNews\FrontPage\Application\SubmissionsQuery;
-use SocialNews\FrontPage\Infrastructure\MockSubmissionsQuery;
+use SocialNews\FrontPage\Infrastructure\DbalSubmissionsQuery;
+use Doctrine\DBAL\Connection;
+use SocialNews\Framework\Dbal\ConnectionFactory;
+use SocialNews\Framework\Dbal\DatabaseUrl;
 
 $injector = new Injector();
 
@@ -20,7 +23,23 @@ $injector->delegate(
 
 $injector->define(TemplateDirectory::class, [':rootDirectory' => ROOT_DIR]);
 
-$injector->alias(SubmissionsQuery::class, MockSubmissionsQuery::class);
+$injector->alias(SubmissionsQuery::class, DbalSubmissionsQuery::class);
 $injector->share(SubmissionsQuery::class);
+
+$injector->define(
+    DatabaseUrl::class,
+    [':url' => 'mysql://homestead:secret@127.0.0.1:3306/professional_php_tutorial']
+);
+
+$injector->delegate(
+    Connection::class, 
+    function() use ($injector): Connection 
+    {
+        $factory = $injector->make(ConnectionFactory::class);
+        return $factory->create();
+    }
+);
+
+$injector->share(Connection::class);
 
 return $injector;
