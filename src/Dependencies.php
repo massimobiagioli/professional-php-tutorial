@@ -1,6 +1,10 @@
 <?php declare(strict_types=1);
 
 use Auryn\Injector;
+use SocialNews\Framework\Csrf\TokenStorage;
+use SocialNews\Framework\Csrf\SymfonySessionTokenStorage;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 use SocialNews\Framework\Rendering\TemplateRenderer;
 use SocialNews\Framework\Rendering\TwigTemplateRendererFactory;
 use SocialNews\Framework\Rendering\TemplateDirectory;
@@ -41,5 +45,9 @@ $injector->delegate(
 );
 
 $injector->share(Connection::class);
+
+$injector->alias(TokenStorage::class, SymfonySessionTokenStorage::class);
+
+$injector->alias(SessionInterface::class, Session::class);
 
 return $injector;

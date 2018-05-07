@@ -6,6 +6,7 @@
     <input type="text" name="title" id="submission-title"><br>
     <label for="submission-url">URL</label>
     <input type="url" name="url" id="submission-url"><br>
+    <input type="text" name="token" value="{{ get_token('submission') }}"><br>
     <input type="submit" value="Submit">
 </form>
 {% endblock %}
