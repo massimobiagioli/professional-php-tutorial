@@ -13,6 +13,8 @@ use SocialNews\FrontPage\Infrastructure\DbalSubmissionsQuery;
 use Doctrine\DBAL\Connection;
 use SocialNews\Framework\Dbal\ConnectionFactory;
 use SocialNews\Framework\Dbal\DatabaseUrl;
+use SocialNews\Submission\Domain\SubmissionRepository;
+use SocialNews\Submission\Infrastructure\DbalSubmissionRepository;
 
 $injector = new Injector();
 
@@ -49,5 +51,7 @@ $injector->share(Connection::class);
 $injector->alias(TokenStorage::class, SymfonySessionTokenStorage::class);
 
 $injector->alias(SessionInterface::class, Session::class);
+
+$injector->alias(SubmissionRepository::class, DbalSubmissionRepository::class);
 
 return $injector;
