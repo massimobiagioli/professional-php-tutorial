@@ -4,6 +4,7 @@ namespace SocialNews\Submission\Domain;
 
 use DateTimeImmutable;
 use Ramsey\Uuid\UuidInterface;
+use Ramsey\Uuid\Uuid;
 
 final class Submission
 {
