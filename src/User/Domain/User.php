@@ -4,7 +4,7 @@ namespace SocialNews\User\Domain;
 
 use DateTimeImmutable;
 use Ramsey\Uuid\UuidInterface;
-use Ramsey\Uuis\Uuid;
+use Ramsey\Uuid\Uuid;
 
 final class User
 {
