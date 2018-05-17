@@ -6,16 +6,21 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Connection;
 use SocialNews\User\Domain\User;
 use SocialNews\User\Domain\UserRepository;
+use SocialNews\User\Domain\UserWasLoggedIn;
+use LoginException;
 use DateTimeImmutable;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 final class DbalUserRepository implements UserRepository
 {
     private $connection;
+    private $session;
 
-    public function __construct(Connection $connection)
+    public function __construct(Connection $connection, Session $session)
     {
         $this->connection = $connection;
+        $this->session = $session;
     }
 
     public function add(User $user): void 
@@ -36,6 +41,15 @@ final class DbalUserRepository implements UserRepository
 
     public function save(User $user): void 
     {
+        foreach ($user->getRecordedEvents as $event) {
+            if ($event instanceof UserWasLoggedIn) {
+                $this->session->set('userid', $user->getId()->toString());
+                continue;
+            }
+            throw new LoginException(get_class($event) . ' was not handled');
+        }
+        $user->clearRecordedEvents();
+        
         $qb = $this->connection->createQueryBuilder();
 
         $qb->update('users');

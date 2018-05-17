@@ -20,6 +20,6 @@ final class LogIn
 
     public function getPassword(): string 
     {
-        return $this->Password;
+        return $this->password;
     }
 }
