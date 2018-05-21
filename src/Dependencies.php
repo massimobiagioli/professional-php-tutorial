@@ -19,6 +19,8 @@ use SocialNews\User\Domain\UserRepository;
 use SocialNews\User\Infrastructure\DbalUserRepository;
 use SocialNews\User\Application\NicknameTakenQuery;
 use SocialNews\User\Infrastructure\DbalNicknameTakenQuery;
+use SocialNews\Framework\Rbac\User;
+use SocialNews\Framework\Rbac\SymfonySessionCurrentUserFactory;
 
 $injector = new Injector();
 
@@ -56,5 +58,13 @@ $injector->alias(SessionInterface::class, Session::class);
 $injector->alias(SubmissionRepository::class, DbalSubmissionRepository::class);
 $injector->alias(UserRepository::class, DbalUserRepository::class);
 $injector->alias(NicknameTakenQuery::class, DbalNicknameTakenQuery::class);
+
+$injector->delegate(
+    User::class, 
+    function() use ($injector): User {
+        $factory = $injector->make(SymfonySessionCurrentUserFactory::class);
+        return $factory->create();
+    }
+);
 
 return $injector;
