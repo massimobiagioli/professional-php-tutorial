@@ -8,7 +8,7 @@ final class AuthorId
 {
     private $id;
 
-    private function __construct($id): 
+    private function __construct($id)
     {
         $this->id = $id;
     }
