@@ -28,7 +28,7 @@ final class DbalSubmissionRepository implements SubmissionRepository
                 $submission->getCreationDate(),
                 'datetime'
             ),
-            'auhtor_user_id' => $qb->createNamedParameter(
+            'author_user_id' => $qb->createNamedParameter(
                 $submission->getAuthorId()->toString()
             )
         ]);

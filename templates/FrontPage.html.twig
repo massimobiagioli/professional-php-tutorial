@@ -6,6 +6,8 @@
         {% for submission in submissions %}
         <li>
             <a href="{{ submission.url|e('html_attr') }}">{{ submission.title }}</a>
+            <br>
+            <small>submitted by <b>{{ submission.author|raw }}</b></small>
         </li>
         {% endfor %}
     </ol>
