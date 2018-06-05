@@ -6,6 +6,7 @@ use SocialNews\Framework\Rendering\TemplateRenderer;
 use SocialNews\Submission\Application\SubmitLinkHandler;
 use SocialNews\Framework\Rbac\Permission;
 use SocialNews\Framework\Rbac\User;
+use SocialNews\Framework\Rbac\AuthenticatedUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -65,7 +66,12 @@ final class SubmissionController
             }
             return $response;
         }
-        $this->submitLinkHandler->handle($form->toCommand());
+
+        if (!$this->user instanceof AuthenticatedUser) {
+            throw new \LogicException("Only authenticated users can submit links");
+        }
+
+        $this->submitLinkHandler->handle($form->toCommand($this->user));
         $this->session->getFlashBag()->add('success', 'Your URL was submitted successfully');
         return $response;
     }

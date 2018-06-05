@@ -41,9 +41,9 @@ final class DbalUserRepository implements UserRepository
 
     public function save(User $user): void 
     {
-        foreach ($user->getRecordedEvents as $event) {
+        foreach ($user->getRecordedEvents() as $event) {
             if ($event instanceof UserWasLoggedIn) {
-                $this->session->set('userid', $user->getId()->toString());
+                $this->session->set('userId', $user->getId()->toString());
                 continue;
             }
             throw new LoginException(get_class($event) . ' was not handled');
